@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".EditProfile"
+    android:background="@drawable/bg1">
+
+  <androidx.cardview.widget.CardView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_margin="30dp"
+      app:cardCornerRadius="30dp"
+      app:cardElevation="20dp"
+      >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="814dp"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="@drawable/bg1"
+        android:alpha="0.9"
+        >
+
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Edit Profile"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="36sp"
+          android:textStyle="bold" />
+
+      <EditText
+          android:id="@+id/editfirstName"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:layout_marginTop="40dp"
+          android:drawablePadding="8dp"
+          android:hint="FirstName"
+          android:padding="8dp"
+          android:textColor="@color/black" />
+
+      <EditText
+          android:id="@+id/editlastname"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:layout_marginTop="40dp"
+          android:drawablePadding="8dp"
+          android:hint="LastName"
+          android:padding="8dp"
+          android:textColor="@color/black" />
+
+      <EditText
+          android:id="@+id/editpseudoe"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:layout_marginTop="40dp"
+          android:drawablePadding="8dp"
+          android:hint="Pseudo"
+          android:padding="8dp"
+          android:textColor="@color/black" />
+
+      <EditText
+          android:id="@+id/birthdate"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:layout_marginTop="20dp"
+          android:drawablePadding="8dp"
+          android:hint="Birthdate"
+          android:padding="8dp"
+          android:textColor="@color/black" />
+
+      <EditText
+          android:id="@+id/editPassword"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:layout_marginTop="20dp"
+          android:drawablePadding="8dp"
+          android:hint="Password"
+          android:inputType="textPassword"
+          android:padding="8dp"
+          android:textColor="@color/black" />
+
+      <EditText
+          android:id="@+id/editphone"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:layout_marginTop="20dp"
+          android:drawablePadding="8dp"
+          android:hint="phone"
+          android:inputType="textPassword"
+          android:padding="8dp"
+          android:textColor="@color/black" />
+
+
+
+      <Button
+          android:id="@+id/saveButton"
+          android:layout_width="match_parent"
+          android:layout_height="60dp"
+          android:layout_marginTop="30dp"
+          android:text="Save"
+          android:textSize="18sp"
+          app:cornerRadius="20dp" />
+
+
+    </LinearLayout>
+
+  </androidx.cardview.widget.CardView>
+
+</LinearLayout>

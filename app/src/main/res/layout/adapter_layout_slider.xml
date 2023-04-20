@@ -1,0 +1,96 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@color/white">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:paddingEnd="20dp">
+
+    <TextView
+        android:id="@+id/edit_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:text="save" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:textSize="23sp"
+    android:text="firstname:"/>
+
+        <EditText
+            android:id="@+id/text_slider_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="Ceci est un texte aleatoire"
+            android:textSize="23sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/md_black_1000"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="23sp"
+
+            android:text="lastname:"/>
+
+        <EditText
+            android:id="@+id/text_slider_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="Ceci est un texte aleatoire"
+            android:textSize="23sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/md_black_1000"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="23sp"
+
+            android:text="pseudo:"/>
+
+        <EditText
+            android:id="@+id/text_slider_pseudo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="Ceci est un texte aleatoire"
+            android:textSize="23sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/md_black_1000"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>
