@@ -83,6 +83,8 @@ class TradeFragment : Fragment() {
 
 
         val retro = RetrofitClient().getInstance().create(OutfitService::class.java)
+        val sharedPreferences = requireActivity().getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+        val id = sharedPreferences.getString("id","")
         retro.getoutfit().enqueue(object : Callback<List<OutfitResponse.Outfit>> {
             override fun onResponse(
                 call: Call<List<OutfitResponse.Outfit>>,

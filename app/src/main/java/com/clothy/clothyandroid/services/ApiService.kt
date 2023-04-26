@@ -10,6 +10,7 @@ interface ApiService {
     data class ForgotPasswordRequest(val email: String)
 
     data class ForgotPasswordResponse(val message: String)
+    @Headers("Content-Type: application/json; charset=utf-8")
     @POST("api/login")
     fun login(
         @Body userRequest: UserRequest

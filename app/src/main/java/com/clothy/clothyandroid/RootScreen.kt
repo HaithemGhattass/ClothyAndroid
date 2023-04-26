@@ -12,11 +12,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -41,12 +38,7 @@ fun MainScreen() {
 
 
 }
-@SuppressLint("SuspiciousIndentation")
-@Composable
-fun chat() {
 
-
-}
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -100,7 +92,7 @@ fun RootScreen() {
            }
 
            composable(NavigationItem.Chat.route){
-               chat()
+               Match()
            }
 
 

@@ -31,6 +31,7 @@ import com.clothy.clothyandroid.NavigationItem
 import com.clothy.clothyandroid.R
 import com.clothy.clothyandroid.services.ApiService
 import com.clothy.clothyandroid.services.RetrofitClient
+import com.clothy.clothyandroid.services.RetrofitClient.CookieStorage.cookies
 import com.clothy.clothyandroid.services.UserRequest
 import com.clothy.clothyandroid.services.UserResponse
 import retrofit2.Call

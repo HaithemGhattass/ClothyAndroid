@@ -59,10 +59,7 @@ public class ChatFragment extends Fragment {
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(mAdapter);
 
-        prepareMessageList();
 
-
-        prepareContactList();
         LikeAdapter contactAdapter = new LikeAdapter(getContext(), likeList);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -76,27 +73,9 @@ public class ChatFragment extends Fragment {
     }
 
 
-    private void prepareMessageList(){
 
-        Random rand = new Random();
-        int id = rand.nextInt(100);
-        int i;
-        for(i=0; i<5; i++) {
-            MessageItem message = new MessageItem(id, messageNames[i], messages[i], counts[i], messagePictures[i]);
-            messageList.add(message);
-        }
-    }
 
-    private void prepareContactList(){
-        likeList = new ArrayList<>();
-        Random rand = new Random();
-        int id = rand.nextInt(100);
-        int i;
-        for(i=0; i<2; i++) {
-            Like like = new Like(id, likeNames[i], likePictures[i]);
-            likeList.add(like);
-        }
-    }
+
 
 
 }

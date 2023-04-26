@@ -59,7 +59,8 @@ fun TradeFragmentContent(fragment: TradeFragment) {
                 .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
                .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view)
         )
-
+    val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+val id = sharedPreferences.getString("id","")
     val retro = RetrofitClient().getInstance().create(OutfitService::class.java)
     retro.getoutfit().enqueue(object : Callback<List<OutfitResponse.Outfit>> {
         override fun onResponse(
@@ -69,7 +70,7 @@ fun TradeFragmentContent(fragment: TradeFragment) {
             if (response.isSuccessful) {
                 val user = response.body()
 
-                user?.get(1)?.type?.let { Log.e("type", it) }
+              //  user?.get(0)?.type?.let { Log.e("type", it) }
                 if (user != null) {
                     for (userr in user) {
                         userr.category?.let { Log.e("category", it) }

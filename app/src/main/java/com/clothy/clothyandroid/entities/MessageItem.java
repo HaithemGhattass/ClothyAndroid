@@ -2,26 +2,31 @@ package com.clothy.clothyandroid.entities;
 
 public class MessageItem {
 
-    private int id;
+    private String id;
+    private String idR;
     private String name;
     private String content;
     private int count;
-    private int picture;
+    private String picture;
 
 
     public MessageItem() {
     }
 
-    public MessageItem(int id, String name, String content, int count, int picture) {
+    public MessageItem(String id, String idR, String name, String content, int count, String picture) {
         this.id = id;
+        this.idR = idR;
         this.name = name;
         this.content = content;
         this.count = count;
         this.picture = picture;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
+    }
+    public String getIdR() {
+        return idR;
     }
 
     public String getName() {
@@ -36,12 +41,15 @@ public class MessageItem {
         return count;
     }
 
-    public int getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+    public void setIdR(String idR) {
+        this.idR = idR;
     }
 
     public void setName(String name) {
@@ -56,7 +64,7 @@ public class MessageItem {
         this.count = count;
     }
 
-    public void setPicture(int id) {
+    public void setPicture(String id) {
         this.id = id;
     }
 }

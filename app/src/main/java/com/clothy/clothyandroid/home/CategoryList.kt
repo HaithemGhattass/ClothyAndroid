@@ -1,5 +1,6 @@
 package com.clothy.clothyandroid.home
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
@@ -7,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,7 +25,10 @@ import retrofit2.Response
 @Composable
 fun CategoryList() {
     var outfits by remember { mutableStateOf(emptyList<OutfitResponse.Outfit>()) }
+    val context = LocalContext.current
 
+    val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+    val id = sharedPreferences.getString("id","")
     val retro = RetrofitClient().getInstance().create(OutfitService::class.java)
     retro.getoutfit().enqueue(object : Callback<List<OutfitResponse.Outfit>> {
         override fun onResponse(
@@ -34,7 +39,7 @@ fun CategoryList() {
             if (response.isSuccessful) {
                 val user = response.body()
 
-                user?.get(1)?.type?.let { Log.e("type", it) }
+                //user?.get(0)?.type?.let { Log.e("type", it) }
                 if (user != null) {
                    outfits = user
                 }

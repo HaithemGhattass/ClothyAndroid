@@ -1,8 +1,10 @@
 package com.clothy.clothyandroid
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -12,9 +14,12 @@ import com.bumptech.glide.Glide
 import androidx.compose.material.Surface
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
+import com.clothy.clothyandroid.services.RetrofitClient
+import com.clothy.clothyandroid.services.cookies
 import com.clothy.clothyandroid.ui.theme.ClothyAndroidTheme
 
 
+@SuppressLint("MissingInflatedId")
 @Composable
 fun AccountScreen() {
     AndroidView(
@@ -29,7 +34,13 @@ fun AccountScreen() {
             val usernameTextView = view.findViewById<TextView>(R.id.name)
             val emailTextView = view.findViewById<TextView>(R.id.email)
             val image = view.findViewById<ImageView>(R.id.profile_image)
-            val editButton = view.findViewById<LinearLayout>(R.id.editP)
+            val editButton = view.findViewById<LinearLayout>(R.id.chat)
+
+editButton.setOnClickListener{
+    val intent1 = Intent(context,ChatActivity::class.java)
+    context.startActivity(intent1)
+}
+
             val url = "http://192.168.1.10:9090/uploads/IMAGE_1670987951352.webp"
             Glide.with(context).load(url).into(image)
             // Do any additional setup for the view here
@@ -46,6 +57,9 @@ fun AccountScreen() {
                     if (editor != null) {
                         editor.clear()
                         editor.apply()
+                        RetrofitClient.CookieStorage.cookies.clear()
+
+                        Log.e("cookies", RetrofitClient.CookieStorage.cookies.toString())
                     }
                 val intent2 = Intent(context, OnboardingActivity::class.java)
                 context.startActivity(intent2)

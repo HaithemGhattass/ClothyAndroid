@@ -7,11 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.clothy.clothyandroid.R
-import com.clothy.clothyandroid.services.MatchResponse
-import com.clothy.clothyandroid.services.MatchService
+import com.clothy.clothyandroid.services.*
 import com.clothy.clothyandroid.services.OutfitResponse.Outfit
-import com.clothy.clothyandroid.services.OutfitService
-import com.clothy.clothyandroid.services.RetrofitClient
 import com.mindorks.placeholderview.SwipePlaceHolderView
 import com.mindorks.placeholderview.annotations.Layout
 import com.mindorks.placeholderview.annotations.Resolve
@@ -61,11 +58,16 @@ class TinderCard(
     @SwipeIn
     private fun onSwipeIn() {
         Log.d("EVENT", "onSwipedIn")
-        Log.e("match",mProfile.userID.toString())
 
+        val sharedPreferences = mContext.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val id = sharedPreferences.getString("id","")
         val idReciver = mProfile.userID.toString()
-        match(idReciver)
-
+        val IdOutfitR =mProfile.idd.toString()
+        val IdOutfit =mProfile.idd.toString()
+        match(idReciver,IdOutfitR,IdOutfit)
+        Log.e("match",mProfile.userID.toString())
+        Log.e("match",mProfile.idd.toString())
+        Log.e("match",id.toString())
 
 
     }
@@ -79,9 +81,12 @@ class TinderCard(
     private fun onSwipeOutState() {
         Log.d("EVENT", "onSwipeOutState")
     }
-    private fun match (IdReciver:String) {
+    private fun match (IdReciver:String,IdOutfitR:String,IdOutfit:String) {
+        val request = MatchRequest()
+        request.IdOutfitR = IdOutfitR
+        request.IdOutfit= IdOutfit
         val retro = RetrofitClient().getInstance().create(MatchService::class.java)
-        retro.match(IdReciver).enqueue(object : Callback<MatchResponse> {
+        retro.match(IdReciver,request).enqueue(object : Callback<MatchResponse> {
             override fun onResponse(call: Call<MatchResponse>, response: Response<MatchResponse>) {
 
                 if (response.isSuccessful) {

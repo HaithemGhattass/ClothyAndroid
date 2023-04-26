@@ -2,11 +2,16 @@ package com.clothy.clothyandroid.services
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+
 class MatchResponse {
 @SerializedName("match")
 @Expose
 var match: Match? =null
+
 class Match {
+    @SerializedName("_id")
+    @Expose
+    var Id: String? = null
     @SerializedName("IdSession")
     @Expose
     var IdSession: String? = null
@@ -17,11 +22,11 @@ class Match {
 
     @SerializedName("IdOutfit")
     @Expose
-    var IdOutfit: String? = null
+    var IdOutfit: Array<String>? =null
 
     @SerializedName("IdOutfitR")
     @Expose
-    var IdOutfitR: String? = null
+    var IdOutfitR: Array<String>? =null
 
     @SerializedName("Etat")
     @Expose
@@ -29,7 +34,7 @@ class Match {
 
     @SerializedName("totrade")
     @Expose
-    var totrade: Int? = null
+    var totrade: String? = null
 
     @SerializedName("totradeR")
     @Expose
@@ -38,5 +43,8 @@ class Match {
     @SerializedName("trader")
     @Expose
     var trader: String? = null
+    @SerializedName("userr")
+    @Expose
+    var userr: UserResponse.User? =null
 }
 }

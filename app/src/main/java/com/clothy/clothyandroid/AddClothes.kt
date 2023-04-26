@@ -1,23 +1,23 @@
 package com.clothy.clothyandroid
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ColorDrawable
-import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.mlkit.common.model.LocalModel
@@ -25,28 +25,28 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions
 import java.io.IOException
+/*
+private lateinit var cameraBtn: ImageButton
+private lateinit var myImage: ImageView
+private val cameraRequestId  = 1222
+@Composable
+fun AddClothes() {
+    val context = LocalContext.current
+    AndroidView(
+        factory = { context ->
+            val view = LayoutInflater.from(context).inflate(R.layout.activity_chatt, null)
 
-class Camera : AppCompatActivity() {
-
-    private lateinit var cameraBtn: ImageButton
-    private lateinit var myImage: CustomImageView
-    private val cameraRequestId  = 1222
-
-    @SuppressLint("MissingInflatedId")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_camera)
-        myImage = findViewById<CustomImageView>(R.id.myImage)
-        cameraBtn  = findViewById<ImageButton>(R.id.greenCheckButton)
-        /**get Permission*/
-        if (ContextCompat.checkSelfPermission(
-                applicationContext, Manifest.permission.CAMERA
-            )== PackageManager.PERMISSION_DENIED)
-            ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.CAMERA),
-                cameraRequestId
-            )
-        /**set camera Open*/
+            myImage = view.findViewById<ImageView>(R.id.supermanImageView)
+            cameraBtn  = view.findViewById<ImageButton>(R.id.greenCheckButton)
+            /**get Permission*/
+            if (ContextCompat.checkSelfPermission(
+                    applicationContext, Manifest.permission.CAMERA
+                )== PackageManager.PERMISSION_DENIED)
+                ActivityCompat.requestPermissions(
+                    this, arrayOf(Manifest.permission.CAMERA),
+                    cameraRequestId
+                )
+            /**set camera Open*/
 
             val cameraActivityResultLauncher = registerForActivityResult(
                 ActivityResultContracts.StartActivityForResult()
@@ -66,8 +66,8 @@ class Camera : AppCompatActivity() {
                     bitmap?.apply {
                         img.setImageBitmap(this)
                     }
-                    val txtOutput : TextView = findViewById(R.id.txtOutput)
-
+                    val txtOutput : TextView = view.findViewById(R.id.txtOutput)
+                    val btn: Button = view.findViewById(R.id.cameraBtn)
                     val options = CustomImageLabelerOptions.Builder(localModel)
                         .setConfidenceThreshold(0.2f)
                         .setMaxResultCount(1)
@@ -85,57 +85,32 @@ class Camera : AppCompatActivity() {
                                 outputText += "$text : $confidence\n"
                                 //val index = label.index
                             }
-
                             txtOutput.text = outputText
-                            val drawable = myImage.drawable
-
-// Get the color of the drawable
-                            val color = when (drawable) {
-                                is ColorDrawable -> drawable.color
-                                is BitmapDrawable -> getDominantColor(drawable.bitmap)
-                                else -> throw IllegalArgumentException("Unsupported drawable type")
-                            }
-                            txtOutput.setTextColor(color)
-                            println(color)
-                            val hexColor = java.lang.String.format("#%06X", 0xFFFFFF and color)
                         }
                         .addOnFailureListener { e ->
                             // Task failed with an exception
                             // ...
                         }
 
+
                 }
 
             }
-        val btn: ImageButton = findViewById(R.id.redXButton)
-        btn.setOnClickListener{
-            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            cameraActivityResultLauncher.launch(cameraIntent)
-        }
-        val add : ImageButton= findViewById(R.id.greenCheckButton)
-        add.setOnClickListener {
-
-        }
 
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             cameraActivityResultLauncher.launch(cameraIntent)
 
 
-    }
+            view
+        },
+        update = { view ->
+            // Update the view here if necessary
 
-
-
-}
-fun Context.assetsToBitmap(fileName: String): Bitmap?{
-    return try {
-        with(assets.open(fileName)){
-            BitmapFactory.decodeStream(this)
         }
-    } catch (e: IOException) { null }
+
+
+    )
+
 }
-fun getDominantColor(bitmap: Bitmap): Int {
-    val newBitmap = Bitmap.createScaledBitmap(bitmap, 1, 1, true)
-    val color = newBitmap.getPixel(0, 0)
-    newBitmap.recycle()
-    return color
-}
+
+ */

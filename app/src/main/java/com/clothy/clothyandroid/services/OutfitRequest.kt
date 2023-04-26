@@ -22,7 +22,7 @@ class OutfitRequest {
     @SerializedName("userID")
     @Expose
     var userID:String? =null
-    @SerializedName("id")
+    @SerializedName("_id")
     @Expose
     var id:String? =null
 

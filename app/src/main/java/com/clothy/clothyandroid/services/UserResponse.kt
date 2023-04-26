@@ -2,7 +2,10 @@ package com.clothy.clothyandroid.services
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-
+data class MatchResponsee(
+    @SerializedName("doc") val doc: List<MatchResponse.Match>,
+    @SerializedName("users") val users: List<UserResponse.User>
+)
 class UserResponse {
     @SerializedName("userr")
     @Expose
