@@ -13,6 +13,7 @@ import java.io.IOException
 
 
 class RetrofitClient {
+    private val BASE_URL = "http://10.0.2.2:9090/uploads/"
     object CookieStorage {
         val cookies = mutableListOf<String>()
     }
@@ -43,10 +44,14 @@ class RetrofitClient {
         }
     }
 
+    val BASE_URLL = "http://10.0.2.2:9090/uploads/"
+
+
     private val okHttpClient = OkHttpClient().newBuilder()
         .addInterceptor(cookies.AddCookiesInterceptor(MyApplication.getInstance()))
         .addInterceptor(cookies.ReceivedCookiesInterceptor(MyApplication.getInstance()))
     fun getInstance(): Retrofit {
+
         val gson = GsonBuilder().setLenient().create()
         return Retrofit.Builder()
             .baseUrl(/*"https://cicero-crm.com/api/"*/ "http://10.0.2.2:9090/")

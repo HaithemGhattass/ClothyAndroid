@@ -2,20 +2,21 @@ package com.clothy.clothyandroid.onBoarding
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -25,15 +26,17 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.clothy.clothyandroid.MyApplication
 import com.clothy.clothyandroid.NavigationItem
 import com.clothy.clothyandroid.R
 import com.clothy.clothyandroid.services.ApiService
 import com.clothy.clothyandroid.services.RetrofitClient
-import com.clothy.clothyandroid.services.RetrofitClient.CookieStorage.cookies
 import com.clothy.clothyandroid.services.UserRequest
 import com.clothy.clothyandroid.services.UserResponse
+import com.google.accompanist.insets.ProvideWindowInsets
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,24 +47,31 @@ import java.net.HttpCookie
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun onBoardingScreen(
+fun onBoardingScreen(videoUri: Uri,
     navigateAction: () -> Unit , navController: NavController
 ) {
+    val exoPlayer = remember { MyApplication.getInstance().buildExoPlayer(videoUri) }
+
+
 
     Scaffold {
+        DisposableEffect(
+            AndroidView(
+                factory = { it.buildPlayerView(exoPlayer) },
+                modifier = Modifier.fillMaxSize()
+            )
+        ) {
+            onDispose {
+                exoPlayer.release()
+            }
+        }
         val emailState = remember { mutableStateOf("") }
         val navigationcontroller = rememberNavController()
         val context = LocalContext.current
         val passwordState = remember { mutableStateOf("") }
         Box {
-            Image(
-                painter = painterResource(id = R.drawable.bg1),
-                contentDescription = "",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
             Column(modifier = Modifier
-                .padding(horizontal = 32.dp, vertical = 80.dp)
+                .padding(horizontal = 32.dp, vertical = 50.dp)
                 .fillMaxSize()) {
                 Text(
                     text = "Welcome to\nClothy",
@@ -70,153 +80,119 @@ fun onBoardingScreen(
                     fontWeight = FontWeight.Black
                 )
                 Spacer(modifier = Modifier.fillMaxHeight(0.5f))
-                Card(
-                    elevation = 4.dp,
-                    modifier = Modifier
-                        .border(
-                            width = 1.dp,
-                            color = Color.White.copy(0.1f),
-                            shape = RoundedCornerShape(27.dp)
-                        )
-                        .clip(RoundedCornerShape(27.dp))
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.cardblur),
-                        contentDescription = "",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-
-                    )
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                        horizontalAlignment = Alignment.Start,
                         modifier = Modifier
-                            .padding(7.dp)
+                            .padding(vertical = 0.dp)
 
                     ) {
 
-                        Box(
+
+                        TextField(
+                            value = emailState.value,
+                            onValueChange = { emailState.value = it },
+                            leadingIcon = { Icon(imageVector = Icons.Filled.Person, null) },
+                            label = { Text(text = "Email") },
+                            colors = TextFieldDefaults.textFieldColors(
+                                textColor = Color.Black,
+                                backgroundColor = Color.White,
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent
+                            ),
                             modifier = Modifier
+                                .fillMaxWidth()
                                 .border(
                                     width = 1.dp,
-                                    color = Color.White.copy(0.5f),
+                                    color = Color.Black.copy(0.5f),
                                     shape = RoundedCornerShape(percent = 50)
                                 )
-                        ) {
-                            TextField(
-                                value  = emailState.value,
-                                onValueChange = {emailState.value = it},
-                                placeholder = { Text("Email") },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    textColor = Color.Black,
-                                    backgroundColor = Color.Transparent,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
-                            )
-                        }
+                                .padding(horizontal = 0.dp),
+                            shape = RoundedCornerShape(percent = 50)
+                        )
+
                         Spacer(modifier = Modifier.height(16.dp))
-                        Box(
-                            modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    color = Color.White.copy(0.5f),
-                                    shape = RoundedCornerShape(percent = 50)
-                                )
-                        ) {
+
                             var passwordVisibility by remember { mutableStateOf(false) }
 
                             TextField(
                                 value = passwordState.value,
-                                onValueChange = {passwordState.value = it},
-                                placeholder = { Text("Password") },
+                                onValueChange = { passwordState.value = it },
+                                leadingIcon = { Icon(imageVector = Icons.Default.Lock, null) },
+                                label = { Text(text = "Password") },
                                 colors = TextFieldDefaults.textFieldColors(
                                     textColor = Color.Black,
-                                    backgroundColor = Color.Transparent,
+                                    backgroundColor = Color.White,
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color.Black.copy(0.5f),
+                                        shape = RoundedCornerShape(percent = 50)
+                                    )
+                                    .padding(horizontal = 0.dp),
+                                shape = RoundedCornerShape(percent = 50),
                                 visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                                 trailingIcon = {
-                                    IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                                    IconButton(onClick = {
+                                        passwordVisibility = !passwordVisibility
+                                    }) {
                                         Icon(
                                             imageVector = if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                                             contentDescription = if (passwordVisibility) "Hide password" else "Show password",
-                                            tint = Color.White
+                                            tint = Color.Black
                                         )
                                     }
                                 }
                             )
-                        }
+
                         Spacer(Modifier.padding(bottom = 7.dp))
-
-                        Text(
-                            "forgot password? Sign up",
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.ExtraLight,
-                            color = Color.White,
-                            modifier = Modifier.clickable {
-                                navController.navigate(NavigationItem.forgitpwd.route)
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("Forgot password?", color = Color.White)
+                            TextButton(onClick = {navController.navigate(NavigationItem.forgitpwd.route)}) {
+                                Text("CLICk HERE")
                             }
+                        }
 
-                        )
-
-                        Spacer(Modifier.padding(bottom = 7.dp, top = 7.dp))
-                        Button(
-                            onClick = {
-                                login(
-                                    emailState.value,
-                                    passwordState.value,
-                                    navigateAction,
-                                    context
-                                )
-                            } ,
-                            shape = RoundedCornerShape(percent = 50),
-                            modifier = Modifier.border(
-                                width = 1.dp,
-                                color = Color.White.copy(0.5f),
-                                shape = RoundedCornerShape(percent = 50)
-                            ),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(151, 169, 246, alpha = 0x32), contentColor = Color.White)
-                        ) {
-                            Text(
-                                "Login",
-                                modifier = Modifier.padding(horizontal = 40.dp, vertical = 4.dp),
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.SemiBold
+                        Spacer(Modifier.padding(bottom = 0.dp, top = 7.dp))
+                        Button(onClick = {
+                            login(
+                                emailState.value,
+                                passwordState.value,
+                                navigateAction,
+                                context
                             )
+                        }, modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(24.dp),
 
+                            ) {
+                            Text("SIGN IN", Modifier.padding(vertical = 8.dp))
                         }
 
-                        Spacer(Modifier.padding(bottom = 7.dp))
-
-                        Text(
-                            "Dont have an account? Sign up",
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.ExtraLight,
-                            color = Color.White,
-                            modifier = Modifier.clickable {
-                                navController.navigate(NavigationItem.Signup.route)
-
-
-                            }
-
+                        Spacer(Modifier.padding(bottom = 0.dp))
+                        Divider(
+                            color = Color.White.copy(alpha = 0.9f),
+                            thickness = 1.dp,
+                            modifier = Modifier.padding(top = 50.dp)
                         )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("Don't have an account?", color = Color.White)
+                            TextButton(onClick = {navController.navigate(NavigationItem.Signup.route)}) {
+                                Text("SING UP")
+                            }
+                        }
                     }
 
-
                 }
+
 
             }
 
         }
     }
-}
+
 
 
 

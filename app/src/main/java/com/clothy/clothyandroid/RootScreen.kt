@@ -3,8 +3,12 @@ package com.clothy.clothyandroid
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -21,14 +25,18 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.ViewCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.fragment.fragment
 import com.clothy.clothyandroid.home.HomeScreen
 import com.clothy.clothyandroid.onBoarding.SignUpScreen
 import com.clothy.clothyandroid.onBoarding.onBoardingScreen
+import com.clothy.clothyandroid.onBoarding.Loginn
+
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun MainScreen() {
@@ -40,9 +48,12 @@ fun MainScreen() {
 }
 
 
+
+
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun RootScreen() {
+
     val navigationcontroller = rememberNavController()
     var shouldShowlogin by rememberSaveable { mutableStateOf(true) }
     Scaffold(
@@ -61,25 +72,30 @@ fun RootScreen() {
         if(email != ""){
             shouldShowlogin = false
         }
-       NavHost(navController = navigationcontroller , startDestination = if (shouldShowlogin) {
-           NavigationItem.Login.route} else {NavigationItem.Home.route} ){
+       NavHost(navController = navigationcontroller , startDestination = (if (shouldShowlogin) {
+           NavigationItem.Login.route
+       } else {NavigationItem.Home.route}) as String
+       ){
            composable(NavigationItem.Login.route){
 
-               onBoardingScreen(navigateAction = {
+               onBoardingScreen(getVideoUri(), navigateAction = {
                    navigationcontroller.navigate(NavigationItem.Home.route)
                    shouldShowlogin = false
                    println("taadiiiit")
                }, navController = navigationcontroller)
            }
            composable(NavigationItem.Home.route){
-               HomeScreen()
+
+               MyComposable()
+
            }
            composable(NavigationItem.Signup.route){
-               SignUpScreen( navController = navigationcontroller)
+               SignUpScreen(getVideoUri(), navController = navigationcontroller)
            }
 
            composable(NavigationItem.Trade.route){
-               MyComposable()
+
+               Homee()
            }
            composable(NavigationItem.Profile.route){
                AccountScreen()
@@ -88,7 +104,7 @@ fun RootScreen() {
                MainScreen()
            }
            composable(NavigationItem.forgitpwd.route){
-               ForgotPasswordScreen()
+               ForgotPasswordScreen(getVideoUri(),navController = navigationcontroller)
            }
 
            composable(NavigationItem.Chat.route){
@@ -105,8 +121,8 @@ sealed class NavigationItem(var route: String ,var icon: ImageVector, var title:
     object Login : NavigationItem("login", Icons.Filled.Home, "Home")
     object Home : NavigationItem("home", Icons.Filled.Home, "Home")
     object Chat : NavigationItem("chat", Icons.Filled.Chat, "Chat")
-    object Add : NavigationItem("add", Icons.Filled.Add, "Add")
-    object Trade : NavigationItem("trade", Icons.Filled.CurrencyExchange, "Trade")
+    object Add : NavigationItem("add", Icons.Filled.AddAPhoto, "Add")
+    object Trade : NavigationItem("trade", Icons.Filled.Apartment, "Trade")
     object Profile : NavigationItem("profile", Icons.Filled.Person, "Profile")
 
 
@@ -122,7 +138,7 @@ fun BottomBar(navController: NavController){
         NavigationItem.Profile
     )
     BottomNavigation(
-        backgroundColor = Color(33,17,52),
+        backgroundColor = Color(2, 119, 189),
         contentColor = Color.White
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -137,7 +153,7 @@ fun BottomBar(navController: NavController){
                         Color.White
                     )
                 )},
-                selectedContentColor = Color.White,
+                selectedContentColor = Color.LightGray,
                 unselectedContentColor = Color.White.copy(0.4f),
                 alwaysShowLabel = false,
                 selected = currentRoute == item.route,
@@ -156,4 +172,9 @@ fun BottomBar(navController: NavController){
             }
 
     }
+}
+private fun getVideoUri(): Uri {
+    val rawId = R.raw.clouds
+    val videoUri = "android.resource://com.clothy.clothyandroid.onBoarding/$rawId"
+    return Uri.parse(videoUri)
 }

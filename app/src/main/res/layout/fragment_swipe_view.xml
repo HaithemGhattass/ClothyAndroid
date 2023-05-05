@@ -5,14 +5,14 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whiteGray">
+    android:background="@color/black"
+    >
 
 
     <com.mindorks.placeholderview.SwipePlaceHolderView
         android:id="@+id/swipeView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/md_grey_400"
   />
-
-
 </RelativeLayout>

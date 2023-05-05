@@ -39,7 +39,7 @@ class TinderCard(
     @SuppressLint("SetTextI18n")
     @Resolve
     private fun onResolved() {
-        Glide.with(mContext).load(mProfile.photo).into(profileImageView!!)
+        Glide.with(mContext).load(RetrofitClient().BASE_URLL+mProfile.photo).into(profileImageView!!)
         nameAgeTxt!!.text = mProfile.type + " " + mProfile.taille
         locationNameTxt!!.text = mProfile.category.toString()
     }

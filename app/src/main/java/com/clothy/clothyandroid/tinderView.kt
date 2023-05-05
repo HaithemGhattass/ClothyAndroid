@@ -2,11 +2,13 @@ package com.clothy.clothyandroid
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Point
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -28,7 +30,7 @@ import retrofit2.Response
 
 @Composable
 fun MyComposable() {
-    TradeFragmentContent(TradeFragment())
+    TradeFragmentContent()
 
 }
 @Preview
@@ -42,10 +44,11 @@ fun show() {
 
 @SuppressLint("ServiceCast")
 @Composable
-fun TradeFragmentContent(fragment: TradeFragment) {
+fun TradeFragmentContent() {
+
     val context = LocalContext.current
     val mSwipeView = remember { SwipePlaceHolderView(context) }
-    val bottomMargin: Int = Utils.dpToPx(100)
+    val bottomMargin: Int = Utils.dpToPx(50)
     val windowSize: Point = Utils.getDisplaySize(context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
     mSwipeView.getBuilder<SwipePlaceHolderView, SwipeViewBuilder<SwipePlaceHolderView>>()
         .setDisplayViewCount(3)
@@ -90,7 +93,7 @@ val id = sharedPreferences.getString("id","")
     })
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         SwipeView(mSwipeView = mSwipeView)
     }

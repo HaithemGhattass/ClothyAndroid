@@ -8,7 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="semi_transparent_background">#80000000</color>
-
+    <color name="light_white">#D2D2D2</color>
     <color name="purple">#603A91</color>
     <color name="colorPrimary">#FE3C72</color>
     <color name="colorPrimaryDark">@color/md_pink_800</color>

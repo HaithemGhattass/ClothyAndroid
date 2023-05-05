@@ -30,6 +30,7 @@ fun AccountScreen() {
             val username = sharedPreferences?.getString("firstname", "")
             val email = sharedPreferences?.getString("email", "")
             val lastname = sharedPreferences?.getString("lastname", "")
+            val imagee = sharedPreferences?.getString("image","")
             val fullname = "$username $lastname"
             val usernameTextView = view.findViewById<TextView>(R.id.name)
             val emailTextView = view.findViewById<TextView>(R.id.email)
@@ -37,11 +38,13 @@ fun AccountScreen() {
             val editButton = view.findViewById<LinearLayout>(R.id.chat)
 
 editButton.setOnClickListener{
-    val intent1 = Intent(context,ChatActivity::class.java)
+   /* val intent1 = Intent(context,Closet::class.java)
     context.startActivity(intent1)
+
+    */
 }
 
-            val url = "http://192.168.1.10:9090/uploads/IMAGE_1670987951352.webp"
+            val url = RetrofitClient().BASE_URLL+imagee
             Glide.with(context).load(url).into(image)
             // Do any additional setup for the view here
             usernameTextView.text = fullname

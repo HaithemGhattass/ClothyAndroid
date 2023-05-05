@@ -30,25 +30,14 @@ object MessageItemHolder {
 }
 val TAG = MainActivity::class.java.simpleName
 var messageList = ArrayList<MessageItem>()
-var likeList: List<Like>? = null
 var mAdapter: MessageAdapter? = null
-val messages = arrayOf("Ah d'accord", "Juste par habitude en tout cas", "Hey!", "6946743263", "Give me your number, I will call you"
-)
 val msg = mutableListOf<String>()
 val c = mutableListOf<Int>()
 val msn = mutableListOf<String>()
 val idd = mutableListOf<String>()
 val idR = mutableListOf<String>()
-val counts = intArrayOf(0, 3, 0, 0, 1)
 val ii = mutableListOf<String>()
-val messagePictures = intArrayOf(
-    R.drawable.user_woman_3,
-    R.drawable.user_woman_4,
-    R.drawable.user_woman_5,
-    R.drawable.user_woman_6,
-    R.drawable.user_woman_7
-)
-val messageNames = arrayOf("Fanelle", "Chloe", "Cynthia", "Kate", "Angele")
+
 
 @Composable
 fun Match() {
@@ -57,18 +46,13 @@ fun Match() {
     factory = { context ->
         val view = LayoutInflater.from(context).inflate(R.layout.activity_chat, null)
         val retro = RetrofitClient().getInstance().create(MatchService::class.java)
-
-
         retro.getmatch().enqueue(object : Callback<List<MatchResponse.Match>> {
-
             override fun onResponse(
                 call: Call<List<MatchResponse.Match>>,
                 response: Response<List<MatchResponse.Match>>
             ) {
-
                 if (response.isSuccessful) {
                     val user = response.body()
-
                    // user?.get(0)?.Etat?.let { Log.e("type", it.toString()) }
                     if (user != null) {
                         idR.clear()
@@ -84,7 +68,8 @@ fun Match() {
                             c.add(user.size)
                             msn.add(userr.userr?.lastname.toString())
                             idR.add((userr.userr?.id.toString()))
-                            ii.add(userr.userr?.image.toString())
+                            ii.add(RetrofitClient().BASE_URLL+userr.userr?.image.toString())
+                            println(userr.userr?.image.toString())
                             matchs = listOf(userr)
                             prepareMessageList()
 
@@ -107,9 +92,7 @@ fun Match() {
 
 
 
-         val likePictures = intArrayOf(R.drawable.user_woman_1, R.drawable.user_woman_2)
-         val messageNames = arrayOf("Fanelle", "Chloe", "Cynthia", "Kate", "Angele")
-         val likeNames = arrayOf("Sophie", "Clara")
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_messages)
         messageList = ArrayList()
         mAdapter = MessageAdapter(messageList ?: ArrayList())

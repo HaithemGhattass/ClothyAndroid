@@ -20,6 +20,7 @@ import com.clothy.clothyandroid.ChatActivity
 import com.clothy.clothyandroid.MyApplication
 import com.clothy.clothyandroid.R
 import com.clothy.clothyandroid.entities.MessageItem
+import com.clothy.clothyandroid.services.RetrofitClient
 import okhttp3.WebSocket
 import java.util.*
 import kotlin.collections.ArrayList
@@ -41,13 +42,15 @@ class MessageAdapter(private val messageList: List<MessageItem>) : RecyclerView.
         val context = holder.itemView.context
         holder.contentTextView.text = item.content
         holder.nameTextView.text = item.name
-        val shared = MyApplication.getInstance().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val editor = shared.edit()
-        editor.putString("reciver", item.name)
-        editor.putString("idreciver", item.idR)
-        editor.putString("matchID",item.id)
-        editor.commit()
+
         holder.chat.setOnClickListener {
+            val shared = MyApplication.getInstance().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+            val editor = shared.edit()
+            editor.putString("reciver", item.name)
+            editor.putString("idreciver", item.idR)
+            editor.putString("matchID",item.id)
+            editor.putString("imageReciver",item.picture)
+            editor.apply()
             val intent = Intent(context,ChatActivity::class.java)
             context.startActivity(intent)
             onChatRoomClickListener?.onChatRoomClick(item.id)

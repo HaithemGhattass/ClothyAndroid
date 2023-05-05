@@ -2,6 +2,7 @@ package com.clothy.clothyandroid
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -11,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
@@ -28,7 +30,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.clothy.clothyandroid.onBoarding.buildExoPlayer
+import com.clothy.clothyandroid.onBoarding.buildPlayerView
 import com.clothy.clothyandroid.services.ApiService
 import com.clothy.clothyandroid.services.RetrofitClient
 import com.clothy.clothyandroid.services.UserRequest
@@ -41,8 +47,19 @@ import java.nio.file.WatchEvent
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun ForgotPasswordScreen() {
+fun ForgotPasswordScreen(videoUri: Uri,navController: NavController) {
+    val exoPlayer = remember { MyApplication.getInstance().buildExoPlayer(videoUri) }
     Scaffold {
+        DisposableEffect(
+            AndroidView(
+                factory = { it.buildPlayerView(exoPlayer) },
+                modifier = Modifier.fillMaxSize()
+            )
+        ) {
+            onDispose {
+                exoPlayer.release()
+            }
+        }
         val emailState = remember { mutableStateOf("") }
         val navigationcontroller = rememberNavController()
         val context = LocalContext.current
@@ -58,82 +75,54 @@ fun ForgotPasswordScreen() {
 
 
         Box {
-            Image(
-                painter = painterResource(id = R.drawable.bg1),
-                contentDescription = "",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+
             Column(modifier = Modifier
                 .padding(horizontal = 32.dp, vertical = 80.dp)
                 .fillMaxSize()) {
                 Text(
-                    text = "Welcome to\nClothy",
+                    text = "Reset your\nPassword",
                     color = Color.White,
                     fontSize = 36.sp,
                     fontWeight = FontWeight.Black
                 )
                 Spacer(modifier = Modifier.fillMaxHeight(0.5f))
-                Card(
-                    elevation = 4.dp,
-                    modifier = Modifier
-                        .border(
-                            width = 1.dp,
-                            color = Color.White.copy(0.1f),
-                            shape = RoundedCornerShape(27.dp)
-                        )
-                        .clip(RoundedCornerShape(27.dp))
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.cardblur),
-                        contentDescription = "",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-
-                    )
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .padding(27.dp)
+                            .padding(0.dp)
 
                     ) {
 if(showPasswordFields) {
-    Box(
-        modifier = Modifier
-            .border(
-                width = 1.dp,
-                color = Color.White.copy(0.5f),
-                shape = RoundedCornerShape(percent = 50)
-            )
-    ) {
-        OutlinedTextField(
+
+        TextField(
             value = emailState.value,
             onValueChange = { emailState.value = it },
+            leadingIcon = { Icon(imageVector = Icons.Filled.Email, null) },
+            label = { Text(text = "Email") },
             placeholder = { Text("Enter your email") },
             colors = TextFieldDefaults.textFieldColors(
                 textColor = Color.Black,
-                backgroundColor = Color.Transparent,
+                backgroundColor = Color.White,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .border(
+                    width = 1.dp,
+                    color = Color.Black.copy(0.5f),
+                    shape = RoundedCornerShape(percent = 50)
+                )
+                .padding(horizontal = 1.dp),
+            shape = RoundedCornerShape(percent = 50),
         )
-    }
+
     Spacer(modifier = Modifier.height(16.dp))
-    Box(
-        modifier = Modifier
-            .border(
-                width = 1.dp,
-                color = Color.White.copy(0.5f),
-                shape = RoundedCornerShape(percent = 50)
-            )
-    ) {
+
         if (showCodeField) {
 
 
-            OutlinedTextField(
+            TextField(
                 value = code.value,
                 onValueChange = { code.value = it },
                 placeholder = { Text("Enter your code") },
@@ -141,16 +130,22 @@ if(showPasswordFields) {
 
                 colors = TextFieldDefaults.textFieldColors(
                     textColor = Color.Black,
-                    backgroundColor = Color.Transparent,
+                    backgroundColor = Color.White,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+                    .border(
+                        width = 1.dp,
+                        color = Color.Black.copy(0.5f),
+                        shape = RoundedCornerShape(percent = 50)
+                    )
+                    .padding(horizontal = 1.dp),
+                shape = RoundedCornerShape(percent = 50),
             )
         }
-    }
+
 
 
     Spacer(Modifier.padding(bottom = 7.dp, top = 7.dp))
@@ -174,23 +169,25 @@ if(showPasswordFields) {
             }
 
         },
-        shape = RoundedCornerShape(percent = 50),
-        modifier = Modifier.border(
+
+        modifier = Modifier
+            .border(
             width = 1.dp,
             color = Color.White.copy(0.5f),
             shape = RoundedCornerShape(percent = 50)
-        ),
-        colors = ButtonDefaults.buttonColors(
+        ).fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp)
+       /* colors = ButtonDefaults.buttonColors(
             backgroundColor = Color(151, 169, 246, alpha = 0x32),
             contentColor = Color.White
         )
+
+        */
     ) {
         Text(
             if (codeSent)
                 "Comfirm Code" else "Send Code",
-            modifier = Modifier.padding(horizontal = 40.dp, vertical = 4.dp),
-            fontSize = 15.sp,
-            fontWeight = FontWeight.SemiBold
+            Modifier.padding(vertical = 8.dp)
         )
     }
 } else {
@@ -204,7 +201,7 @@ if(showPasswordFields) {
     ) {
         var passwordVisibility by remember { mutableStateOf(false) }
 
-        OutlinedTextField(
+        TextField(
             value = password.value,
             onValueChange = { password.value = it },
             placeholder = { Text("new password") },
@@ -216,7 +213,13 @@ if(showPasswordFields) {
             ),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .border(
+                    width = 1.dp,
+                    color = Color.Black.copy(0.5f),
+                    shape = RoundedCornerShape(percent = 50)
+                )
+                .padding(horizontal = 1.dp),
+            shape = RoundedCornerShape(percent = 50),
             visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 IconButton(onClick = {
@@ -255,7 +258,13 @@ if(showPasswordFields) {
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .border(
+                        width = 1.dp,
+                        color = Color.Black.copy(0.5f),
+                        shape = RoundedCornerShape(percent = 50)
+                    )
+                    .padding(horizontal = 1.dp),
+                shape = RoundedCornerShape(percent = 50),
                 visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = {
@@ -277,6 +286,7 @@ if(showPasswordFields) {
     Button(
         onClick = {
              resetpwd(password.value)
+            navController.navigate(NavigationItem.Login.route)
         },
         enabled = password.value == confirmPassword.value,
 
@@ -315,7 +325,7 @@ if(showPasswordFields) {
                     }
 
 
-                }
+
 
             }
 
@@ -386,23 +396,4 @@ fun resetpwd(newPassword:String)
         }
     })
 }
-@Composable
-fun ForgotPasswordScreenPreview() {
-    ClothyAndroidTheme {
-        Surface {
-            ForgotPasswordScreen()
-        }
-    }
-}
 
-@Preview
-@Composable
-fun ForgotPasswordScreenPreviewLight() {
-    ForgotPasswordScreenPreview()
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun ForgotPasswordScreenPreviewDark() {
-    ForgotPasswordScreenPreview()
-}

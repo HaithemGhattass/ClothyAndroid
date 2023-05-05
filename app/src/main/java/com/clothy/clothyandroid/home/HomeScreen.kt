@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.clothy.clothyandroid.categories
 import com.clothy.clothyandroid.services.WeatherData
 import com.clothy.clothyandroid.services.WeatherViewModel
 import com.clothy.clothyandroid.ui.theme.ClothyAndroidTheme
@@ -59,28 +60,39 @@ Scaffold(
             color = Color.Black,
             fontWeight = FontWeight.SemiBold
         )
-        CategoryList()
+        CategoryList("outwear")
         Text(
             text = "Jeans",
             fontSize = 20.sp,
             color = Color.Black,
             fontWeight = FontWeight.SemiBold
         )
-        CategoryList()
+        CategoryList("jeans")
         Text(
             text = "Hat",
             fontSize = 20.sp,
             color = Color.Black,
             fontWeight = FontWeight.SemiBold
         )
-        CategoryList()
+        CategoryList("hat")
+
+            Text(
+                text = "Shoes",
+                fontSize = 20.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.SemiBold
+            )
+            CategoryList("shoes")
         Text(
-            text = "Shoes",
+            text = "t-shirt",
             fontSize = 20.sp,
             color = Color.Black,
             fontWeight = FontWeight.SemiBold
         )
-        CategoryList()
+        CategoryList("t-shirt")
+
+
+
         WeatherScreen("Tunis","15d5a0d5272b68569a261c345eb231a1",WeatherViewModel())
     }
 }

@@ -1,6 +1,7 @@
 package com.clothy.clothyandroid.onBoarding
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.util.Log
 
 
@@ -15,8 +16,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -40,8 +39,11 @@ import androidx.compose.runtime.getValue
 
 import androidx.compose.runtime.remember
 import androidx.compose.material.Icon
+import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
+import com.clothy.clothyandroid.MyApplication
 import com.clothy.clothyandroid.MyComposable
 import com.clothy.clothyandroid.NavigationItem
 import com.clothy.clothyandroid.services.ApiService
@@ -60,7 +62,7 @@ import java.util.regex.Pattern
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun SignUpScreen(
+fun SignUpScreen(videoUri: Uri,
 
     navController: NavController
 
@@ -68,9 +70,19 @@ fun SignUpScreen(
     var radiostate = remember {
         mutableStateOf(0)
     }
-
+    val exoPlayer = remember { MyApplication.getInstance().buildExoPlayer(videoUri) }
 
     Scaffold {
+        DisposableEffect(
+            AndroidView(
+                factory = { it.buildPlayerView(exoPlayer) },
+                modifier = Modifier.fillMaxSize()
+            )
+        ) {
+            onDispose {
+                exoPlayer.release()
+            }
+        }
         val emailState = remember { mutableStateOf("") }
         val firstnameState = remember { mutableStateOf("") }
         val lastnameState = remember { mutableStateOf("") }
@@ -95,12 +107,7 @@ fun SignUpScreen(
 
 
         Box {
-            Image(
-                painter = painterResource(id = R.drawable.bg1),
-                contentDescription = "",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+
             Column(modifier = Modifier
                 .padding(horizontal = 32.dp, vertical = 8.dp)
                 .fillMaxSize()) {
@@ -111,41 +118,19 @@ fun SignUpScreen(
                     fontWeight = FontWeight.Black
                 )
                Spacer(modifier = Modifier.fillMaxHeight(0.025f))
-                Card(
-                    elevation = 4.dp,
-                    modifier = Modifier
-                        .border(
-                            width = 1.dp,
-                            color = Color.White.copy(0.1f),
-                            shape = RoundedCornerShape(27.dp)
-                        )
-                        .clip(RoundedCornerShape(27.dp))
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.cardblur),
-                        contentDescription = "",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
 
-                    )
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .padding(27.dp)
+                            .padding(0.dp)
 
                     ) {
                         var showErrorFirstname by remember { mutableStateOf(false) }
 
-                        Box(
-                            modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    color = Color.White.copy(0.5f),
-                                    shape = RoundedCornerShape(percent = 50)
-                                )
-                        ) {
                             TextField(
                                 value  = firstnameState.value,
+                                leadingIcon = { Icon(imageVector = Icons.Filled.Person, null) },
+                                label = { Text(text = "Firstname") },
                                 onValueChange = {
                                     if(it.matches(pattern)){
                                         firstnameState.value = it
@@ -157,31 +142,31 @@ fun SignUpScreen(
                                 placeholder = { Text("First name") },
                                 colors = TextFieldDefaults.textFieldColors(
                                     textColor = Color.Black,
-                                    backgroundColor = Color.Transparent,
+                                    backgroundColor = Color.White,
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color.Black.copy(0.5f),
+                                        shape = RoundedCornerShape(percent = 50)
+                                    )
+                                    .padding(horizontal = 1.dp),
+                            shape = RoundedCornerShape(percent = 50)
                             )
-                        }
+
                         if (showErrorFirstname) {
                             Text("Firstname is empty", color = Color.Red, modifier = Modifier.padding(top = 4.dp))
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         var showErrorlastname by remember { mutableStateOf(false) }
 
-                        Box(
-                            modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    color = Color.White.copy(0.5f),
-                                    shape = RoundedCornerShape(percent = 50)
-                                )
-                        ) {
                             TextField(
                                 value  = lastnameState.value,
+                                leadingIcon = { Icon(imageVector = Icons.Filled.Person, null) },
+                                label = { Text(text = "Last Name") },
                                 onValueChange = {
                                     if(it.matches(pattern)){
                                         lastnameState.value = it
@@ -193,15 +178,21 @@ fun SignUpScreen(
                                 placeholder = { Text("Last name") },
                                 colors = TextFieldDefaults.textFieldColors(
                                     textColor = Color.Black,
-                                    backgroundColor = Color.Transparent,
+                                    backgroundColor = Color.White,
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color.Black.copy(0.5f),
+                                        shape = RoundedCornerShape(percent = 50)
+                                    )
+                                    .padding(horizontal = 1.dp),
+                                shape = RoundedCornerShape(percent = 50)
                             )
-                        }
+
                         if (showErrorlastname) {
                             Text("Lastname is empty", color = Color.Red, modifier = Modifier.padding(top = 4.dp))
                         }
@@ -210,47 +201,43 @@ fun SignUpScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                         var showErrorPseudo by remember { mutableStateOf(false) }
 
-                        Box(
-                            modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    color = Color.White.copy(0.5f),
-                                    shape = RoundedCornerShape(percent = 50)
-                                )
-                        ) {
+
                             TextField(
                                 value  = pseudoState.value,
+                                leadingIcon = { Icon(imageVector = Icons.Filled.Person, null) },
+                                label = { Text(text = "Pseudo") },
                                 onValueChange = {pseudoState.value = it
                                     showErrorPseudo = it== ""
 
                                 },
-                                placeholder = { Text("pseudo") },
+                                placeholder = { Text("Pseudo") },
                                 colors = TextFieldDefaults.textFieldColors(
                                     textColor = Color.Black,
-                                    backgroundColor = Color.Transparent,
+                                    backgroundColor = Color.White,
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color.Black.copy(0.5f),
+                                        shape = RoundedCornerShape(percent = 50)
+                                    )
+                                    .padding(horizontal = 1.dp),
+                                shape = RoundedCornerShape(percent = 50)
                             )
-                        }
+
                         if (showErrorPseudo) {
                             Text("Pseudo is empty", color = Color.Red, modifier = Modifier.padding(top = 4.dp))
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         var showErrorMail by remember { mutableStateOf(false) }
-                        Box(
-                            modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    color = Color.White.copy(0.5f),
-                                    shape = RoundedCornerShape(percent = 50)
-                                )
-                        ) {
+
                             TextField(
                                 value  = emailState.value,
+                                leadingIcon = { Icon(imageVector = Icons.Filled.Email, null) },
+                                label = { Text(text = "Email") },
                                 onValueChange = {
                                     emailState.value = it
                                     showErrorMail = !isValidEmail(it)
@@ -259,16 +246,22 @@ fun SignUpScreen(
                                 placeholder = { Text("Email") },
                                 colors = TextFieldDefaults.textFieldColors(
                                     textColor = Color.Black,
-                                    backgroundColor = Color.Transparent,
+                                    backgroundColor = Color.White,
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color.Black.copy(0.5f),
+                                        shape = RoundedCornerShape(percent = 50)
+                                    )
+                                    .padding(horizontal = 1.dp),
+                                shape = RoundedCornerShape(percent = 50)
                             )
 
-                        }
+
                         if (showErrorMail) {
                             Text("Email is invalid", color = Color.Red, modifier = Modifier.padding(top = 4.dp))
                         }
@@ -276,18 +269,13 @@ fun SignUpScreen(
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        Box(
-                            modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    color = Color.White.copy(0.5f),
-                                    shape = RoundedCornerShape(percent = 50)
-                                )
-                        ) {
+
                             var passwordVisibility by remember { mutableStateOf(false) }
 
                             TextField(
                                 value = passwordState.value,
+                                leadingIcon = { Icon(imageVector = Icons.Default.Lock, null) },
+                                label = { Text(text = "Password") },
                                 onValueChange = {passwordState.value = it
                                     showPError = passwordState.value.length < 6
 
@@ -295,25 +283,31 @@ fun SignUpScreen(
                                 placeholder = { Text("Password") },
                                 colors = TextFieldDefaults.textFieldColors(
                                     textColor = Color.Black,
-                                    backgroundColor = Color.Transparent,
+                                    backgroundColor = Color.White,
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color.Black.copy(0.5f),
+                                        shape = RoundedCornerShape(percent = 50)
+                                    )
+                                    .padding(horizontal = 1.dp),
+                                shape = RoundedCornerShape(percent = 50),
                                 visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                                 trailingIcon = {
                                     IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                                         Icon(
                                             imageVector = if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                                             contentDescription = if (passwordVisibility) "Hide password" else "Show password",
-                                            tint = Color.White
+                                            tint = Color.LightGray
                                         )
                                     }
                                 }
                             )
-                        }
+
                         if (showPError) {
                             Text("password length must be at least 6", color = Color.Red, modifier = Modifier.padding(top = 4.dp))
                         }
@@ -333,27 +327,35 @@ fun SignUpScreen(
 
                             TextField(
                                 value = cpasswordState.value,
+                                leadingIcon = { Icon(imageVector = Icons.Default.Lock, null) },
+                                label = { Text(text = "Confirm Password") },
                                 onValueChange = {cpasswordState.value = it
                                     showCPError = cpasswordState.value != passwordState.value
 
                                 },
-                                placeholder = { Text("Comfirm Password") },
+                                placeholder = { Text("Confirm Password") },
                                 colors = TextFieldDefaults.textFieldColors(
                                     textColor = Color.Black,
-                                    backgroundColor = Color.Transparent,
+                                    backgroundColor = Color.White,
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color.Black.copy(0.5f),
+                                        shape = RoundedCornerShape(percent = 50)
+                                    )
+                                    .padding(horizontal = 1.dp),
+                                shape = RoundedCornerShape(percent = 50),
                                 visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                                 trailingIcon = {
                                     IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                                         Icon(
                                             imageVector = if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                                             contentDescription = if (passwordVisibility) "Hide password" else "Show password",
-                                            tint = Color.White
+                                            tint = Color.LightGray
                                         )
                                     }
                                 }
@@ -364,16 +366,11 @@ fun SignUpScreen(
                         }
                         Spacer(Modifier.padding(bottom = 7.dp, top = 7.dp))
                         var showPhoneError by remember { mutableStateOf(false) }
-                        Box(
-                            modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    color = Color.White.copy(0.5f),
-                                    shape = RoundedCornerShape(percent = 50)
-                                )
-                        ) {
+
                             TextField(
                                 value  = PhoneState.value,
+                                leadingIcon = { Icon(imageVector = Icons.Default.PhoneAndroid, null) },
+                                label = { Text(text = "Phone") },
                                 onValueChange = {
                                     PhoneState.value = it
                                     showPhoneError = PhoneState.value.length != 8
@@ -383,48 +380,54 @@ fun SignUpScreen(
                                         placeholder = { Text("Phone") },
                                 colors = TextFieldDefaults.textFieldColors(
                                     textColor = Color.Black,
-                                    backgroundColor = Color.Transparent,
+                                    backgroundColor = Color.White,
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color.Black.copy(0.5f),
+                                        shape = RoundedCornerShape(percent = 50)
+                                    )
+                                    .padding(horizontal = 1.dp),
+                                shape = RoundedCornerShape(percent = 50)
                             )
 
-                        }
+
                         if (showPhoneError) {
                             Text("Phone is invalid", color = Color.Red, modifier = Modifier.padding(top = 4.dp))
                         }
 
                         Spacer(Modifier.padding(bottom = 7.dp, top = 7.dp))
                         var dateDialogState = rememberMaterialDialogState()
-                        Box(
-                            modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    color = Color.White.copy(0.5f),
-                                    shape = RoundedCornerShape(percent = 50)
-                                )
-                        ) {
+
                             TextField(
                                 enabled = false,
-
+                                leadingIcon = { Icon(imageVector = Icons.Filled.EditCalendar, null) },
+                                label = { Text(text = "Birthdate") },
                                 value  = formattedDate,
                                 onValueChange = {},
                                 placeholder = { Text("Pick date") },
                                 colors = TextFieldDefaults.textFieldColors(
                                     textColor = Color.Black,
-                                    backgroundColor = Color.Transparent,
+                                    backgroundColor = Color.White,
                                     focusedIndicatorColor = Color.Transparent,
                                     unfocusedIndicatorColor = Color.Transparent
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 16.dp)
+                                    .border(
+                                        width = 1.dp,
+                                        color = Color.Black.copy(0.5f),
+                                        shape = RoundedCornerShape(percent = 50)
+                                    )
+                                    .padding(horizontal = 1.dp)
                                     .clickable {
                                         dateDialogState.show()
-                                    }
+                                    },
+                            shape = RoundedCornerShape(percent = 50)
                             )
                             MaterialDialog(
                                 dialogState = dateDialogState,
@@ -451,7 +454,7 @@ fun SignUpScreen(
                                     pickedDate = it
                                 }
                             }
-                        }
+
                         val radiooption = listOf("Male","Female","Other")
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -498,46 +501,29 @@ fun SignUpScreen(
 
                                 }
                             //    Log.e("1",firstnameState.value + " " + lastnameState.value + " "+  emailState.value + " " + pseudoState.value + " " + passwordState.value + " "+ cpasswordState.value + " " + formattedDate + " " + radiooption[radiostate.value])
-
                                 },
-                            shape = RoundedCornerShape(percent = 50),
-                            modifier = Modifier.border(
-                                width = 1.dp,
-                                color = Color.White.copy(0.5f),
-                                shape = RoundedCornerShape(percent = 50)
-                            )
-                            ,
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color(151, 169, 246, alpha = 0x32), contentColor = Color.White)
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(24.dp),
                         ) {
-                            Text(
-                                "Sign Up",
-                                modifier = Modifier.padding(horizontal = 40.dp, vertical = 4.dp)
-                                ,
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.SemiBold
-                            )
-
+                            Text("SIGN IN", Modifier.padding(vertical = 8.dp))
                         }
                         Spacer(Modifier.padding(bottom = 18.dp))
 
-                        Text(
-                            " have an account? Sign in",
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.ExtraLight,
-                            color = Color.White,
-
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp)
-                                .clickable {
-                                    navController.navigate(NavigationItem.Login.route)
-                                }
-
+                        Divider(
+                            color = Color.White.copy(alpha = 0.9f),
+                            thickness = 1.dp,
+                            modifier = Modifier.padding(top = 50.dp)
                         )
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text("Don't have an account?", color = Color.White)
+                            TextButton(onClick = {navController.navigate(NavigationItem.Login.route)}) {
+                                Text("SING IN")
+                            }
+                        }
                     }
 
 
-                }
+
 
             }
 

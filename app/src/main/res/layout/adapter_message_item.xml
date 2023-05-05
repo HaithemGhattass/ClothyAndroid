@@ -66,12 +66,12 @@
                 android:id="@+id/text_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text_name"
-                android:layout_marginTop="2dp"
-                android:text="Hello! I will like to talk about documents to give registration process"
-                android:textSize="14sp"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
                 android:maxLines="1"
-                android:ellipsize="end"/>
+                android:textColor="@color/darkGray"
+                android:textSize="17sp"
+                android:text="Danielle"/>
         </LinearLayout>
 
 
