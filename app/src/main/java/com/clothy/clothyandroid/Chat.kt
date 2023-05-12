@@ -92,6 +92,8 @@ fun setupRecyclerViewAdapter() {
     val mlayoutManager = GridLayoutManager(MyApplication.getInstance(), 2)
     recyclerView.layoutManager = mlayoutManager
     recyclerView.addItemDecoration(DividerItemDecoration(MyApplication.getInstance(), DividerItemDecoration.VERTICAL))
+    recyclerView.addItemDecoration(DividerItemDecoration(MyApplication.getInstance(), DividerItemDecoration.HORIZONTAL))
+
     adapter = ProductAdapter(outfitlist)
     recyclerView.adapter = adapter
     adapter?.submitList(outfitlist)

@@ -20,80 +20,46 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import kotlin.properties.Delegates
 
 class EditProfile : AppCompatActivity() {
-    lateinit var dateEdt: EditText
+    lateinit var birthdate: EditText
+    lateinit var firstname: EditText
+    lateinit var lastname: EditText
+    lateinit var pseudo: EditText
+    lateinit var phone :EditText
+    lateinit var Done : Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
+        firstname =findViewById(R.id.first)
+        lastname = findViewById(R.id.last)
+        pseudo = findViewById(R.id.pseudo)
+        phone = findViewById(R.id.phone)
+        val tele = phone.text.toString()
+        birthdate = findViewById(R.id.birthdate)
+        Done= findViewById(R.id.btnDone)
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val F = sharedPreferences?.getString("firstname", "")
+        val P = sharedPreferences?.getString("pseudo", "")
+        val L = sharedPreferences?.getString("lastname", "")
+        val PH = sharedPreferences?.getString("phone", "")
+        firstname.setText(F.toString())
+        pseudo.setText(P.toString())
+        lastname.setText(L.toString())
+        phone.setText(PH.toString())
 
-        val register = findViewById<Button>(R.id.saveButton)
-
-        dateEdt = findViewById(R.id.birthdate)
-        dateEdt.setInputType(InputType.TYPE_NULL);
-        dateEdt.setOnClickListener {
-            val color = resources.getColor(R.color.purple, null)
-            // on below line we are getting
-            // the instance of our calendar.
-            val c = Calendar.getInstance()
-            // on below line we are getting
-            // our day, month and year.
-            val year = c.get(Calendar.YEAR)
-            val month = c.get(Calendar.MONTH)
-            val day = c.get(Calendar.DAY_OF_MONTH)
-            // on below line we are creating a
-            // variable for date picker dialog.
-            val datePickerDialog = DatePickerDialog(
-                // on below line we are passing context.
-                this,
-                { view, year, monthOfYear, dayOfMonth ->
-                    // on below line we are setting
-                    // date to our edit text.
-                    val dat = (dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year)
-                    dateEdt.setText(dat)
-                },
-                // on below line we are passing year, month
-                // and day for the selected date in our date picker.
-                year,
-                month,
-                day
-            )
-            // at last we are calling show
-            // to display our date picker dialog.
-            datePickerDialog.setOnShowListener {
-                val headerId = resources.getIdentifier("date_picker_header", "id", "android")
-                val headerView = datePickerDialog.findViewById<View>(headerId)
-                headerView?.setBackgroundColor(color)
-            }
-
-            datePickerDialog.show()
+        Done.setOnClickListener {
+            update(firstname.text.toString(),lastname.text.toString(),pseudo.text.toString(),phone.text.toString().toInt(),birthdate.text.toString())
+            finish()
         }
-        register.setOnClickListener{
-            val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
-            val id = sharedPreferences.getString("id", "")
-
-            val firstname = findViewById<EditText>(R.id.editfirstName)
-            val lastname = findViewById<EditText>(R.id.editlastname)
-            val pseudo =findViewById<EditText>(R.id.editpseudoe)
-            val pwd =findViewById<EditText>(R.id.editPassword)
-            val phone =findViewById<EditText>(R.id.editphone)
-            val i = (phone.text.toString()).replace("[\\D]".toRegex(), "").toInt()
-            val birthdate = findViewById<EditText>(R.id.birthdate)
-
-            if (id != null) {
-                update(id,firstname.text.toString(),lastname.text.toString(),pseudo.text.toString(),pwd.text.toString(),i, birthdate.text.toString() )
-            }
-
-
-        }
     }
-    fun update(id:String,firstname:String,lastname:String,pseudo:String,password:String,phone:Int,birthdate:String)
+    fun update(firstname:String,lastname:String,pseudo:String,phone:Int,birthdate:String)
     {
         val request = UserRequest()
 
-        request.password =password
+
         request.phone = phone
         request.pseudo= pseudo
         request.firstname= firstname
@@ -101,29 +67,27 @@ class EditProfile : AppCompatActivity() {
         request.date= birthdate
 
         val retro = RetrofitClient().getInstance().create(ApiService::class.java)
-        retro.update(id,request).enqueue(object : Callback<UserResponse> {
+        retro.update(request).enqueue(object : Callback<UserResponse> {
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
 
                 val user = response.body()
-                Log.e("firstname", user!!.userr?.firstname!!)
-                Log.e("email", user!!.userr?.email!!)
-                Log.e("lastname", user!!.userr?.lastname!!)
-                Log.e("phone", user!!.userr?.phone!!.toString())
-                Log.e("gender", user!!.userr?.gender!!)
-                val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-
-                val editor = sharedPreferences.edit()
-                // Save the user's email address in shared preferences
-                editor.putString("id", user!!.userr?.id!!)
-                editor.putString("email", user!!.userr?.email!!)
-                editor.putString("firstname", user!!.userr?.firstname!!)
-                editor.putString("lastname", user!!.userr?.lastname!!)
-                editor.putString("phone", user!!.userr?.phone!!.toString())
-                editor.putString("gander", user!!.userr?.gender!!)
-                editor.putString("image", user!!.userr?.image!!)
-                editor.putString("pseudo", user!!.userr?.pseudo!!)
-                // Commit the changes to the SharedPreferences object
-                editor.commit()
+                if (response.isSuccessful) {
+                    Log.e("firstname", user!!.userr?.firstname!!)
+                    Log.e("email", user!!.userr?.email!!)
+                    Log.e("lastname", user!!.userr?.lastname!!)
+                    Log.e("phone", user!!.userr?.phone!!.toString())
+                    Log.e("gender", user!!.userr?.gender!!)
+                    val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    // Save the user's email address in shared preferences
+                    editor.putString("email", user!!.userr?.email!!)
+                    editor.putString("firstname", user!!.userr?.firstname!!)
+                    editor.putString("lastname", user!!.userr?.lastname!!)
+                    editor.putString("phone", user!!.userr?.phone!!.toString())
+                    editor.putString("pseudo", user!!.userr?.pseudo!!)
+                    // Commit the changes to the SharedPreferences object
+                    editor.apply()
+                }
 
 
             }
@@ -133,5 +97,9 @@ class EditProfile : AppCompatActivity() {
             }
         })
     }
+
+    fun goBack(view: View) {
+        finish()
     }
+}
 

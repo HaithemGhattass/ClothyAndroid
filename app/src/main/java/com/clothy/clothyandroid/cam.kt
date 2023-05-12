@@ -16,7 +16,7 @@ import org.opencv.objdetect.CascadeClassifier
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class Cam : AppCompatActivity(), LoaderCallbackInterface {
+class Cam: AppCompatActivity(), LoaderCallbackInterface {
 
     private val TAG = "cam"
 

@@ -84,7 +84,7 @@ class TinderCard(
     private fun match (IdReciver:String,IdOutfitR:String,IdOutfit:String) {
         val request = MatchRequest()
         request.IdOutfitR = IdOutfitR
-        request.IdOutfit= IdOutfit
+        //request.IdOutfit= IdOutfit
         val retro = RetrofitClient().getInstance().create(MatchService::class.java)
         retro.match(IdReciver,request).enqueue(object : Callback<MatchResponse> {
             override fun onResponse(call: Call<MatchResponse>, response: Response<MatchResponse>) {

@@ -31,6 +31,9 @@ class OutfitResponse {
         @SerializedName("userID")
         @Expose
         var userID:String? =null
+        @SerializedName("locked")
+        @Expose
+        var locked:Boolean? =null
         @SerializedName("_id")
         @Expose
         var idd:String? =null

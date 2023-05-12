@@ -109,6 +109,7 @@ fun onBoardingScreen(videoUri: Uri,
                                 .padding(horizontal = 0.dp),
                             shape = RoundedCornerShape(percent = 50)
                         )
+                        // if true ( x
 
                         Spacer(modifier = Modifier.height(16.dp))
 
@@ -239,6 +240,7 @@ fun login(email: String, password: String, navigateAction: () -> Unit, context: 
                 editor.putString("email", user!!.userr?.email!!)
                 editor.putString("firstname", user!!.userr?.firstname!!)
                 editor.putString("lastname", user!!.userr?.lastname!!)
+                editor.putString("pseudo", user!!.userr?.pseudo!!)
                 editor.putString("phone", user!!.userr?.phone!!.toString())
                 editor.putString("gander", user!!.userr?.gender!!)
                 editor.putString("image", user!!.userr?.image!!)

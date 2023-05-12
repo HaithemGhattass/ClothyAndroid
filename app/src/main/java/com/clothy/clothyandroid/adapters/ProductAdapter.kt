@@ -1,8 +1,10 @@
 package com.clothy.clothyandroid.adapters
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.clothy.clothyandroid.MyApplication
 import com.clothy.clothyandroid.R
+import com.clothy.clothyandroid.outfit_detail
 import com.clothy.clothyandroid.services.OutfitResponse
 import com.clothy.clothyandroid.services.RetrofitClient
 import org.w3c.dom.Text
@@ -36,6 +39,7 @@ class ProductAdapter (private val outfitlist:List<OutfitResponse.Outfit>):  List
         val imgPhoto     : ImageView = view.findViewById(R.id.imgProduct)
         val txtName      : TextView = view.findViewById(R.id.txtProductName)
         val txtPrice     : TextView = view.findViewById(R.id.txtProductPrice)
+        val outfitcolor : ImageView = view.findViewById(R.id.outfit_color)
 //        val txtQuantity  : TextView = view.findViewById(R.id.txtQuantity)
     }
 
@@ -55,6 +59,7 @@ class ProductAdapter (private val outfitlist:List<OutfitResponse.Outfit>):  List
         holder.txtName.setTextColor(Color.parseColor("#333333"));
         holder.txtPrice.text  = product.taille
         holder.txtPrice.setTextColor(Color.parseColor("#333333"));
+        holder.outfitcolor.setBackgroundColor(Color.parseColor(product.couleur))
 
 //        holder.txtQuantity.text = product.productQuan.toString()
 
@@ -63,6 +68,13 @@ class ProductAdapter (private val outfitlist:List<OutfitResponse.Outfit>):  List
             .load(RetrofitClient().BASE_URLL+product.photo)
             .transform(CenterCrop(), RoundedCorners(50))
             .into(holder.imgPhoto)
+        holder.itemView.setOnClickListener {
+            val intent = Intent(holder.itemView.context, outfit_detail::class.java)
+            intent.putExtra("ITEM_ID", product.idd.toString())
+            Log.e("type",product.idd.toString())
+
+            holder.itemView.context.startActivity(intent)
+        }
 
 
     }

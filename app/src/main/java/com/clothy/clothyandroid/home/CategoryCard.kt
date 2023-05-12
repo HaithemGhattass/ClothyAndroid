@@ -31,18 +31,18 @@ import com.clothy.clothyandroid.ui.theme.ClothyAndroidTheme
 
 @Composable
 fun CategoryCard(outfit: OutfitResponse.Outfit) {
-    var isClicked by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(27.dp))
+            .background(Color.LightGray)
             .border(
                 width = 1.dp,
                 color = Color.White.copy(0.5f),
                 shape = RoundedCornerShape(27.dp)
             )
-            .height(186.dp)
-            .width(280.dp)
+            .height(150.dp)
+            .width(120.dp)
     ) {
         BoxWithConstraints(
             modifier = Modifier.fillMaxSize()
@@ -51,41 +51,25 @@ fun CategoryCard(outfit: OutfitResponse.Outfit) {
                 painter = rememberAsyncImagePainter(RetrofitClient().BASE_URLL + outfit.photo.toString()),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds
+                contentScale = ContentScale.Fit
             )
-            if (isClicked) {
-                AlertDialog(
-                    onDismissRequest = { isClicked = false },
-                    title = { Text(text = "Outfit") },
-                    text = { Image(
-                        painter = rememberAsyncImagePainter(RetrofitClient().BASE_URLL + outfit.photo.toString()),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.FillBounds
-                    ) },
-                    buttons = {
-                        Button(
-                            onClick = { isClicked = false },
-                            modifier = Modifier
-                                .padding(vertical = 8.dp)
-                                .height(48.dp)
-                                .fillMaxWidth()
-                        ) {
-                            Text(
-                                text = "Close",
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp
-                            )
-                        }
-                    }
-                )
-            } else {
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickable { isClicked = true }
-                )
+
+                ) {
+                    // Show the lock icon if the outfit is locked
+                    if (outfit.locked!!) {
+                        Image(
+                            painter = painterResource(id = R.drawable.baseline_lock_24),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(16.dp)
+                        )
+                    }
+                }
             }
             Text(
                 text = outfit.type.toString(),
@@ -96,11 +80,10 @@ fun CategoryCard(outfit: OutfitResponse.Outfit) {
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 16.dp)
-
             )
         }
     }
-}
+
 
 
 

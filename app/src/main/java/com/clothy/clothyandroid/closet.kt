@@ -3,6 +3,7 @@ package com.clothy.clothyandroid
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +21,6 @@ class Closet : AppCompatActivity() {
     var outfitlist = ArrayList<OutfitResponse.Outfit>()
     private lateinit var adapter: ProductAdapter
     private lateinit var recyclerView: RecyclerView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_closet)
@@ -61,13 +61,12 @@ class Closet : AppCompatActivity() {
         })
         recyclerView = findViewById(R.id.rv)
         outfitlist = ArrayList()
-
+        val layoutParams = recyclerView.layoutParams
+        recyclerView.layoutParams = layoutParams
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         adapter = ProductAdapter(outfitlist)
         recyclerView.adapter = adapter
         adapter.submitList(outfitlist)
-
-
     }
     private fun setupRecyclerViewAdapter() {
         recyclerView = findViewById(R.id.rv)

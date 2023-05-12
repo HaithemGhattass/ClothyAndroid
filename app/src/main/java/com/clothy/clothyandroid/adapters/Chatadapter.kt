@@ -52,6 +52,8 @@ class MessageAdapter(private val messageList: List<MessageItem>) : RecyclerView.
             editor.putString("imageReciver",item.picture)
             editor.apply()
             val intent = Intent(context,ChatActivity::class.java)
+            intent.putExtra("username", item.name+" "+item.content)
+            intent.putExtra("matcher", item.idR)
             context.startActivity(intent)
             onChatRoomClickListener?.onChatRoomClick(item.id)
         }

@@ -2,6 +2,7 @@ package com.clothy.clothyandroid
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,13 +14,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.clothy.clothyandroid.adapters.MSG
@@ -38,9 +35,9 @@ import org.json.JSONObject
 
 
 class ChatActivity : AppCompatActivity() , MessageAdapter.OnChatRoomClickListener{
-    private val message : ImageButton by lazy { findViewById(R.id.button) }
+    private val message : ImageView by lazy { findViewById(R.id.likeIconID) }
     private val output: TextView by lazy { findViewById(R.id.messageTextView) }
-    private val entryText: EditText by lazy { findViewById(R.id.editText) }
+    private val entryText: EditText by lazy { findViewById(R.id.messageEdittextID) }
     private val client by lazy {
         OkHttpClient()
     }
@@ -49,7 +46,7 @@ class ChatActivity : AppCompatActivity() , MessageAdapter.OnChatRoomClickListene
     private var Rcieved =  mutableListOf<MSG>()
     private lateinit var listView: ListView
     private lateinit var editText: EditText
-    private lateinit var button: ImageButton
+    private lateinit var button: ImageView
     private lateinit var send: Button
     private lateinit var username :TextView
     private lateinit var userImage : ImageView
@@ -60,7 +57,7 @@ class ChatActivity : AppCompatActivity() , MessageAdapter.OnChatRoomClickListene
     private lateinit var reciver :String
     private lateinit var matchID :String
     private lateinit var idreciver :String
-
+    private lateinit var seelocked: ImageView
 
 
 
@@ -82,12 +79,13 @@ class ChatActivity : AppCompatActivity() , MessageAdapter.OnChatRoomClickListene
          imaageR = shared.getString("imageReciver","").toString()
          matchID = shared.getString("matchID","").toString()
         listView = findViewById(R.id.listView)
-        editText = findViewById(R.id.editText)
-        button = findViewById(R.id.button)
+        editText = findViewById(R.id.messageEdittextID)
+        button = findViewById(R.id.likeIconID)
         username= findViewById(R.id.user_name)
         userImage= findViewById(R.id.user_image)
+        seelocked = findViewById(R.id.locked)
         val myListComposeView = findViewById<ComposeView>(R.id.myList)
-        val toggleButton = findViewById<ImageButton>(R.id.toggleButton)
+        val toggleButton = findViewById<ImageView>(R.id.cameraIconID)
 
         myListComposeView.setContent {
             Column(
@@ -112,6 +110,10 @@ class ChatActivity : AppCompatActivity() , MessageAdapter.OnChatRoomClickListene
                 }
             }
         }
+        seelocked.setOnClickListener {
+            val intent = Intent(this,Locked::class.java)
+            startActivity(intent)
+        }
 // Set the adapter for the recyclerView
 
 
@@ -128,6 +130,17 @@ class ChatActivity : AppCompatActivity() , MessageAdapter.OnChatRoomClickListene
             editText.text.clear()
 
         }
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable) {
+                if (s.toString().trim { it <= ' ' }.length > 0) {
+                    button.visibility = View.VISIBLE
+                } else {
+                    button.visibility = View.GONE
+                }
+            }
+        })
         message.setOnClickListener {
             ws?.apply {
                 val text = entryText.text.toString()
@@ -144,6 +157,7 @@ class ChatActivity : AppCompatActivity() , MessageAdapter.OnChatRoomClickListene
             } ?: ping("Error: Restart the App to reconnect")
         }
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -164,7 +178,11 @@ class ChatActivity : AppCompatActivity() , MessageAdapter.OnChatRoomClickListene
             .addInterceptor(cookies.ReceivedCookiesInterceptor(MyApplication.getInstance()))
             .build()
         ws = client.newWebSocket(request, listener)
-        username.text= reciver
+        Rcieved.clear()
+        val key1 = intent.getStringExtra("username")
+
+        username.text= key1.toString()
+        Log.e("username",key1.toString())
         Glide.with(applicationContext)
             .load(imaageR)
             .into(userImage)
@@ -200,11 +218,9 @@ class ChatActivity : AppCompatActivity() , MessageAdapter.OnChatRoomClickListene
 
             val jsonArray = JSONArray(jsonString)
             val messageList = mutableListOf<MSG>()
-
             for (i in 0 until jsonArray.length()) {
                 val jsonObject = jsonArray.getJSONObject(i)
                 val messageItem = Gson().fromJson(jsonObject.getString("msg"), MSG::class.java)
-
                 if (messageItem.from == id)
                 {
                     messageItem.isSender= true
@@ -217,8 +233,9 @@ class ChatActivity : AppCompatActivity() , MessageAdapter.OnChatRoomClickListene
                 }
                 Rcieved.add(messageItem)
                 Log.e("message",Rcieved[0].message)
+                val key1 = intent.getStringExtra("username")
 
-                username.text= reciver
+                username.text= key1.toString()
                 Glide.with(applicationContext)
                     .load(imaageR)
                     .into(userImage)
@@ -245,7 +262,11 @@ class ChatActivity : AppCompatActivity() , MessageAdapter.OnChatRoomClickListene
             .build()
         ws = client.newWebSocket(request, listener)
     }
+    fun goBack(view: View) {
+        finish()
+    }
 }
+
 
 
 

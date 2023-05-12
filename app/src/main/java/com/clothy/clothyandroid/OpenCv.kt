@@ -14,6 +14,7 @@ import android.provider.MediaStore
 import android.text.InputType
 import android.util.Log
 import android.view.MotionEvent
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -126,7 +127,7 @@ class Cammm : AppCompatActivity(),LoaderCallbackInterface {
                 val localModel = LocalModel.Builder()
                     .setAssetFilePath("model (3).tflite")
                     .build()
-                val txtOutput : TextView = findViewById(R.id.txtOutput)
+                val txtOutput : TextView = findViewById(R.id.txtRewardDetailName)
 
                 val options = CustomImageLabelerOptions.Builder(localModel)
                     .setConfidenceThreshold(0.2f)
@@ -162,10 +163,10 @@ class Cammm : AppCompatActivity(),LoaderCallbackInterface {
                         txtOutput.setTextColor(color)
                         println(color)
                         val hexColor = java.lang.String.format("#%06X", 0xFFFFFF and color)
-                        Color = findViewById(R.id.editTextColor)
+                        Color = findViewById(R.id.txtProductDetailPrice)
                         Color.setText(hexColor)
-                        typee =findViewById(R.id.editTextType)
-                        taille = findViewById(R.id.editTexttaile)
+                        typee =findViewById(R.id.txtDescription)
+                        taille = findViewById(R.id.textView11)
                         typee.setText(typ)
                         val tailles = arrayOf("S", "L", "XL", "XXL", "XXXL")
                         val pointure = arrayOf("38", "39", "40", "41", "42","43","44","45")
@@ -198,7 +199,7 @@ class Cammm : AppCompatActivity(),LoaderCallbackInterface {
                             }
                             taille.inputType = InputType.TYPE_NULL
                         }
-                        val cc: ImageButton = findViewById(R.id.greenCheckButton)
+                        val cc: Button = findViewById(R.id.btnRewardDetialClaim)
 
                         cc.setOnClickListener {
                             val bitmap = (myImage.drawable as BitmapDrawable).bitmap
@@ -263,12 +264,12 @@ class Cammm : AppCompatActivity(),LoaderCallbackInterface {
                         // Task failed with an exception
                         // ...
                     }
-                val btn: ImageButton = findViewById(R.id.redXButton)
+                val btn: Button = findViewById(R.id.btnRewardDetialClaim)
                 btn.setOnClickListener{
                     val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                     startActivity(cameraIntent)
                 }
-                val add : ImageButton= findViewById(R.id.greenCheckButton)
+                val add : Button= findViewById(R.id.btnRewardDetialClaim)
                 add.setOnClickListener {
 
                 }

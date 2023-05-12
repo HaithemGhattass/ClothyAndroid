@@ -5,14 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="@color/white"
     tools:context=".Closet"
+    android:layout_weight="1"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/titleFragment"
@@ -32,11 +33,11 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        app:backgroundTint="@null"
-        android:queryHint="Search"
+        android:queryHint="Search..."
         android:iconifiedByDefault="false"
         android:textColor="@color/black"
         app:searchIcon="@color/black"
+        app:collapseIcon="@null"
         android:background="@drawable/search_bar"
         android:theme="@style/CustomSearchView"/>
 
@@ -46,8 +47,10 @@
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         app:layoutManager="GridLayoutManager"
+        android:background="@color/white"
         app:spanCount="2"
-        tools:listitem="@layout/item_product">
+        tools:listitem="@layout/item_product"
+        >
     </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>

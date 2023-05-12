@@ -59,25 +59,11 @@ class Camera : AppCompatActivity() {
     private lateinit var  taille: EditText
     private val cameraRequestId  = 1222
     var m: Mat? = null
-    private val TAG = "OCVSample::Activity"
-    private val mLoaderCallback: BaseLoaderCallback = object : BaseLoaderCallback(this) {
-        override fun onManagerConnected(status: Int) {
-            when (status) {
-                SUCCESS -> {
-                    Log.i("BaseLoaderCallback", "OpenCV loaded successfully")
-                    m = Mat()
-                }
-                else -> {
-                    super.onManagerConnected(status)
-                }
-            }
-        }
-    }
+
     @SuppressLint("MissingInflatedId", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_camera)
-        myImage = findViewById(R.id.myImage)
+        //myImage = findViewById(R.id.myImage)
         /**get Permission*/
         if (ContextCompat.checkSelfPermission(
                 applicationContext,Manifest.permission.CAMERA
@@ -99,7 +85,7 @@ class Camera : AppCompatActivity() {
         if (requestCode == cameraRequestId && resultCode == RESULT_OK) {
             /**save to Image In layout*/
             val image: Bitmap = data?.extras?.get("data") as Bitmap
-            myImage.setImageBitmap(image)
+            //myImage.setImageBitmap(image)
             val rotationAngle = -90f // Rotate left by 90 degrees
             val matrix = Matrix()
             matrix.postRotate(rotationAngle)
@@ -112,7 +98,11 @@ class Camera : AppCompatActivity() {
             )
             // Pass the image bitmap to the next activity
             val intent = Intent(this, Camm::class.java)
-            intent.putExtra("image", image)
+            intent.putExtra("image", rotatedBitmap)
+            startActivity(intent)
+        }else{
+            val intent =Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
     }
@@ -128,7 +118,6 @@ fun blurFaces(bitmap: Bitmap): Bitmap {
 // create a file in the cache directory to copy the raw resource to
     val cacheDir = MyApplication.getInstance().cacheDir
     val classifierFile = File(cacheDir, "lbpcascade_frontalface.xml")
-
 // copy the raw resource to the cache directory
     inputStream.use { input ->
         FileOutputStream(classifierFile).use { output ->
@@ -148,9 +137,6 @@ fun blurFaces(bitmap: Bitmap): Bitmap {
     Utils.matToBitmap(rgbaMat, bitmap)
     return bitmap
 }
-
-
-
 fun getDominantColor(bitmap: Bitmap): Int {
     val newBitmap = Bitmap.createScaledBitmap(bitmap, 1, 1, true)
     val color = newBitmap.getPixel(0, 0)

@@ -2,24 +2,30 @@ package com.clothy.clothyandroid
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Point
 import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavHostController
 import com.clothy.clothyandroid.entities.TinderCard
 import com.clothy.clothyandroid.services.*
-import com.clothy.clothyandroid.ui.theme.ClothyAndroidTheme
 import com.mindorks.placeholderview.SwipeDecor
 import com.mindorks.placeholderview.SwipePlaceHolderView
 import com.mindorks.placeholderview.SwipeViewBuilder
@@ -29,23 +35,14 @@ import retrofit2.Response
 
 
 @Composable
-fun MyComposable() {
-    TradeFragmentContent()
+fun MyComposable(variable: String, navController: NavHostController) {
+
+    TradeFragmentContent(variable,navController)
 
 }
-@Preview
+@SuppressLint("ServiceCast", "UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun show() {
-    ClothyAndroidTheme() {
-        MyComposable()
-
-    }
-}
-
-@SuppressLint("ServiceCast")
-@Composable
-fun TradeFragmentContent() {
-
+fun TradeFragmentContent(type:String,navController: NavHostController) {
     val context = LocalContext.current
     val mSwipeView = remember { SwipePlaceHolderView(context) }
     val bottomMargin: Int = Utils.dpToPx(50)
@@ -65,7 +62,7 @@ fun TradeFragmentContent() {
     val sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 val id = sharedPreferences.getString("id","")
     val retro = RetrofitClient().getInstance().create(OutfitService::class.java)
-    retro.getoutfit().enqueue(object : Callback<List<OutfitResponse.Outfit>> {
+    retro.getoutfitbytype(type).enqueue(object : Callback<List<OutfitResponse.Outfit>> {
         override fun onResponse(
             call: Call<List<OutfitResponse.Outfit>>,
             response: Response<List<OutfitResponse.Outfit>>
@@ -91,6 +88,8 @@ val id = sharedPreferences.getString("id","")
             // Handle failure
         }
     })
+    val backIcon = ImageVector.vectorResource(id = R.drawable.ic_back2)
+
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -98,6 +97,8 @@ val id = sharedPreferences.getString("id","")
         SwipeView(mSwipeView = mSwipeView)
     }
 }
+
+
 
 @Composable
 fun SwipeView(mSwipeView: SwipePlaceHolderView) {

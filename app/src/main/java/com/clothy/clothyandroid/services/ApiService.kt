@@ -21,8 +21,8 @@ interface ApiService {
     ): Call<UserResponse>
     @GET("api/allUser")
     fun getUsers(): Call<List<UserResponse.User>>
-    @PUT("api/updateU/{id}")
-    fun update(@Path("id") id: String, @Body userRequest: UserRequest): Call<UserResponse>
+    @PUT("api/updateU")
+    fun update( @Body userRequest: UserRequest): Call<UserResponse>
     @POST("api/forgetpwd")
     fun forgetpass(
         @Body userRequest: UserRequest
@@ -33,6 +33,10 @@ interface ApiService {
     ): Call<UserResponse>
     @PUT("api/changepass")
     fun Resetpwd(
+        @Body userRequest: UserRequest
+    ): Call<UserResponse>
+    @PUT("api/updatepass")
+    fun changepwd(
         @Body userRequest: UserRequest
     ): Call<UserResponse>
 }

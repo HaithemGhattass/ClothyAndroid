@@ -59,7 +59,25 @@
       "ndkMetaPlatforms": {
         "min": 16,
         "max": 31,
-        "aliases": {}
+        "aliases": {
+          "20": 19,
+          "25": 24,
+          "J": 16,
+          "J-MR1": 17,
+          "J-MR2": 18,
+          "K": 19,
+          "L": 21,
+          "L-MR1": 22,
+          "M": 23,
+          "N": 24,
+          "N-MR1": 24,
+          "O": 26,
+          "O-MR1": 27,
+          "P": 28,
+          "Q": 29,
+          "R": 30,
+          "S": 31
+        }
       },
       "ndkMetaAbiList": [
         {
@@ -108,7 +126,7 @@
         "rootBuildGradleFolder": "/Users/medamine/Documents/ClothyAndroid",
         "sdkFolder": "/Users/medamine/Library/Android/sdk",
         "isBuildOnlyTargetAbiEnabled": true,
-        "ideBuildTargetAbi": "arm64-v8a",
+        "ideBuildTargetAbi": "arm64-v8a,armeabi-v7a,armeabi",
         "isCmakeBuildCohabitationEnabled": false,
         "isPrefabEnabled": false
       },

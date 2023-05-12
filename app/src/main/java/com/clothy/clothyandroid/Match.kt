@@ -104,23 +104,6 @@ fun Match() {
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.adapter = mAdapter
-        val searchView = view.findViewById<androidx.appcompat.widget.AppCompatEditText>(R.id.search)
-        searchView.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                val filter = mAdapter!!.filter
-                filter.filter(s)
-                Log.e("khdemt","el aasba")
-                mAdapter?.notifyDataSetChanged()
-            }
-        })
-
-
         view
     },
     update = { view ->
